@@ -1,0 +1,45 @@
+-- Tabel Mitra Kurir
+CREATE TABLE Mitra_Kurir (
+    ID_Mitra INT PRIMARY KEY AUTO_INCREMENT,
+    Nama VARCHAR(100) NOT NULL,
+    Alamat TEXT NOT NULL,
+    Nomor_Telepon VARCHAR(15) NOT NULL,
+    Email VARCHAR(100),
+    Nomor_Identitas VARCHAR(50) NOT NULL,
+    Jenis_Kendaraan VARCHAR(50),
+    Plat_Nomor_Kendaraan VARCHAR(20),
+    Status_Akun ENUM('Aktif', 'Tidak Aktif') DEFAULT 'Aktif',
+    Tanggal_Registrasi DATE NOT NULL
+);
+
+-- Tabel Kurir
+CREATE TABLE Kurir (
+    ID_Kelas INT PRIMARY KEY AUTO_INCREMENT,
+    Nama_Kelas VARCHAR(100) NOT NULL,
+    Deskripsi TEXT,
+    Benefit TEXT,
+    Biaya DECIMAL(10, 2) NOT NULL
+);
+
+-- Tabel Registrasi Kelas
+CREATE TABLE Registrasi_Kelas (
+    ID_Registrasi INT PRIMARY KEY AUTO_INCREMENT,
+    ID_Mitra INT,
+    ID_Kelas INT,
+    Tanggal_Registrasi DATE NOT NULL,
+    Status_Pembayaran ENUM('Lunas', 'Belum Lunas') DEFAULT 'Belum Lunas',
+    Metode_Pembayaran VARCHAR(50),
+    FOREIGN KEY (ID_Mitra) REFERENCES Mitra_Kurir(ID_Mitra),
+    FOREIGN KEY (ID_Kelas) REFERENCES Kurir(ID_Kelas)
+);
+
+-- Tabel Registrasi Kelas (Dokumen)
+CREATE TABLE Registrasi_Kelas_Dokumen (
+    ID_Dokumen INT PRIMARY KEY AUTO_INCREMENT,
+    ID_Mitra INT,
+    Jenis_Dokumen VARCHAR(50),
+    KTP VARCHAR(50),
+    Kartu_Keluarga VARCHAR(50),
+    Tanggal_Unggah DATE NOT NULL,
+    FOREIGN KEY (ID_Mitra) REFERENCES Mitra_Kurir(ID_Mitra)
+); 
