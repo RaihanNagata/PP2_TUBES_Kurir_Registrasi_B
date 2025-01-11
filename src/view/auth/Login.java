@@ -1,10 +1,10 @@
 package view.auth;
 
-import view.dashboard.*;
-import javax.swing.*;
-import model.User;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
+import model.User;
+import view.dashboard.*;
 
 public class Login extends JFrame {
     private JTextField txtUserEmail;
@@ -12,6 +12,7 @@ public class Login extends JFrame {
     private JButton btnLogin;
     private JButton btnRegis;
     private JButton btnCancel;
+    private JButton btnForgotPassword; // Tambahkan tombol lupa password
     private JPanel mainPanel;
 
     public Login() {
@@ -24,7 +25,7 @@ public class Login extends JFrame {
 
     private void initializeFrame() {
         setTitle("Login Aplikasi");
-        setSize(350, 250);
+        setSize(400, 300); // Sesuaikan ukuran jendela untuk kenyamanan
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }
@@ -38,11 +39,13 @@ public class Login extends JFrame {
         btnLogin = new JButton("Login");
         btnRegis = new JButton("Register");
         btnCancel = new JButton("Cancel");
+        btnForgotPassword = new JButton("Lupa Password"); // Buat tombol lupa password
     }
 
     private void setupLayout() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL; // Isi ruang horizontal yang tersedia
 
         JLabel lblTitle = new JLabel("Login");
         lblTitle.setFont(new Font("Arial", Font.BOLD, 20));
@@ -59,6 +62,7 @@ public class Login extends JFrame {
         buttonPanel.add(btnLogin);
         buttonPanel.add(btnRegis);
         buttonPanel.add(btnCancel);
+        buttonPanel.add(btnForgotPassword); // Tambahkan tombol lupa password
 
         gbc.gridx = 0;
         gbc.gridy = 3;
@@ -84,6 +88,7 @@ public class Login extends JFrame {
         btnLogin.addActionListener(_ -> validateLogin());
         btnRegis.addActionListener(_ -> handleRegist());
         btnCancel.addActionListener(_ -> System.exit(0));
+        btnForgotPassword.addActionListener(_ -> handleForgotPassword()); // Tambahkan listener untuk tombol lupa password
 
         KeyListener enterKeyListener = new KeyAdapter() {
             @Override
@@ -136,6 +141,14 @@ public class Login extends JFrame {
     private void handleRegist() {
         dispose();
         new Registrasi().setVisible(true);
+    }
+
+    private void handleForgotPassword() {
+        // Logika untuk menangani lupa password, misalnya mengirim email reset password
+        JOptionPane.showMessageDialog(this,
+                "Fitur lupa password belum diimplementasikan.",
+                "Lupa Password",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void clearForm() {
