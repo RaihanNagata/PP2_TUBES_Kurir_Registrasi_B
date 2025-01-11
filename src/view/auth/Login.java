@@ -1,5 +1,6 @@
 package view.auth;
 
+import view.dashboard.*;
 import javax.swing.*;
 import model.User;
 import java.awt.*;
@@ -9,6 +10,7 @@ public class Login extends JFrame {
     private JTextField txtUserEmail;
     private JPasswordField txtPassword;
     private JButton btnLogin;
+    private JButton btnRegis;
     private JButton btnCancel;
     private JPanel mainPanel;
 
@@ -34,6 +36,7 @@ public class Login extends JFrame {
         txtUserEmail = new JTextField(20);
         txtPassword = new JPasswordField(20);
         btnLogin = new JButton("Login");
+        btnRegis = new JButton("Register");
         btnCancel = new JButton("Cancel");
     }
 
@@ -54,6 +57,7 @@ public class Login extends JFrame {
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         buttonPanel.add(btnLogin);
+        buttonPanel.add(btnRegis);
         buttonPanel.add(btnCancel);
 
         gbc.gridx = 0;
@@ -78,6 +82,7 @@ public class Login extends JFrame {
 
     private void setupListeners() {
         btnLogin.addActionListener(_ -> validateLogin());
+        btnRegis.addActionListener(_ -> handleRegist());
         btnCancel.addActionListener(_ -> System.exit(0));
 
         KeyListener enterKeyListener = new KeyAdapter() {
@@ -108,7 +113,7 @@ public class Login extends JFrame {
         User user = User.authenticate(userInput, password);
         if (user != null) {
             JOptionPane.showMessageDialog(this,
-                    "Selamat datang, " + user.getNama() + "!",
+                    "Selamat datang, " + user.getName() + "!",
                     "Login Berhasil",
                     JOptionPane.INFORMATION_MESSAGE);
 
@@ -116,6 +121,8 @@ public class Login extends JFrame {
             this.dispose();
             // Di sini Anda bisa menambahkan kode untuk membuka form utama
             // dan menyimpan data user yang sedang login
+            FramePrimary dashboard = new FramePrimary();
+            dashboard.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this,
                     "Username/Email atau Password salah!\nSilakan coba lagi.",
@@ -124,6 +131,11 @@ public class Login extends JFrame {
             txtPassword.setText("");
             txtPassword.requestFocus();
         }
+    }
+    
+    private void handleRegist() {
+        dispose();
+        new Registrasi().setVisible(true);
     }
 
     private void clearForm() {

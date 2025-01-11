@@ -13,26 +13,29 @@ import java.sql.SQLException;
  * @author Haida
  */
 public class MySqlConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/TubesPP";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "root";
-    private static Connection connection;
 
-    public static Connection getConnection() throws SQLException {
-        if (connection == null || connection.isClosed()) {
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-                System.out.println("Database berhasil terkoneksi!");
-            } catch (ClassNotFoundException e) {
-                throw new SQLException("MySQL JDBC Driver tidak ditemukan", e);
-            }
+    // Tambahkan nama database pada url
+    private final static String DB_URL = "jdbc:mysql://localhost:3306/nama_database";
+    // Isi dengan nama user yang memiliki access ke database
+    private final static String DB_USER = "root";
+    // Isi dengan password milik user tersebut
+    private final static String DB_PASS = "";
+    
+    private static MySqlConnection instance;
+    
+    public static MySqlConnection getInstance() {
+        if (instance == null) {
+            instance = new MySqlConnection();
         }
         return connection;
     }
 
     public static void closeConnection() {
         try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+        } catch (Exception e) {
+            e.printStackTrace();
             if (connection != null && !connection.isClosed()) {
                 connection.close();
                 System.out.println("Database connection closed!");
