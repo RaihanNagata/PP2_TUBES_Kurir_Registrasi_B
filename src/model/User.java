@@ -66,7 +66,7 @@ public class User {
     public void setId(String id) {
         this.id = Integer.parseInt(id);
     }
-    
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -86,7 +86,7 @@ public class User {
     public void setNoTelp(String noTelp) {
         this.noTelp = noTelp;
     }
-    
+
     public void setJenisKelamin(String jenisKelamin) {
         this.jenisKelamin = jenisKelamin;
     }
@@ -180,6 +180,7 @@ public class User {
             insertStmt.setString(5, this.noTelp);
             insertStmt.setString(6, this.jenisKelamin);
             insertStmt.setString(7, this.alamat);
+
             
             int result = insertStmt.executeUpdate();
             conn.commit(); // Commit transaksi

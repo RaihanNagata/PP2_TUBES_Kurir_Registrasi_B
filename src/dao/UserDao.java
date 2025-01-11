@@ -17,6 +17,7 @@ import model.User;
 public class UserDao {
   public int insert(User user) {
     int result = -1;
+
     try (Connection connection = MySqlConnection.getConnection();) {
       PreparedStatement statement = connection.prepareStatement(
           "insert into users (username, name, email, password, no_telp, jenis_kelamin, alamat) values (?, ?, ?, ?, ?, ?)");
@@ -37,6 +38,7 @@ public class UserDao {
 
   public int update(User user) {
     int result = -1;
+    
     try (Connection connection = MySqlConnection.getConnection();) {
       PreparedStatement statement = connection.prepareStatement(
           "update users set username = ?, name = ?, email = ?, password = ?, no_telp = ?, jenis_kelamin = ?, alamat = ?, ktp = ?, kk = ? where id = ?");
@@ -60,16 +62,18 @@ public class UserDao {
 
   public int delete(User user) {
     int result = -1;
+
     try (Connection connection = MySqlConnection.getConnection();) {
       PreparedStatement statement = connection.prepareStatement("delete from users where id = ?");
       statement.setString(1, Integer.toString(user.getId()));
+
       result = statement.executeUpdate();
     } catch (SQLException e) {
       e.printStackTrace();
     }
     return result;
   }
-  
+    
   public List<User> findAll() {
     List<User> list = new ArrayList<>();
     try (Connection connection = MySqlConnection.getConnection();

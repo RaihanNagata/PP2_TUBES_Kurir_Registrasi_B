@@ -169,6 +169,7 @@ public class Registrasi extends JFrame {
         lblGender.setFont(new Font("Arial", Font.PLAIN, 12));
         gbc.gridx = 0;
         gbc.gridy = 7;
+
         mainPanel.add(lblGender, gbc);
 
         JPanel genderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -193,6 +194,7 @@ public class Registrasi extends JFrame {
         lblAlamat.setFont(new Font("Arial", Font.PLAIN, 12));
         gbc.gridx = 0;
         gbc.gridy = 8;
+
         mainPanel.add(lblAlamat, gbc);
 
         txtAlamat.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -219,6 +221,7 @@ public class Registrasi extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 9;
+
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         mainPanel.add(buttonPanel, gbc);
