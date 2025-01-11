@@ -70,7 +70,7 @@ public class FramePrimary extends JFrame {
                     FramePrimary.this.remove(curPanel);
                 }
                 // Panggil kelas FrameAccount, lalu definisikan sebagai current panel
-                FrameAccount account = new FrameAccount();
+                FrameAccount account = new FrameAccount(FramePrimary.this);
                 curPanel = account.panelContent;
                 
                 // Reload panelContent berdasarkan currentPanel yang terakhir

@@ -13,16 +13,22 @@ import java.sql.SQLException;
  * @author Haida
  */
 public class MySqlConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/TubesPP";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "root";
-    private static Connection connection;
 
+    // Tambahkan nama database pada url
+    private final static String DB_URL = "jdbc:mysql://localhost:3306/TubesPP2";
+    // Isi dengan nama user yang memiliki access ke database
+    private final static String DB_USER = "root";
+    // Isi dengan password milik user tersebut
+    private final static String DB_PASS = "";
+    private static Connection connection;
+    
+    private static MySqlConnection instance;
+    
     public static Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+                connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
                 System.out.println("Database berhasil terkoneksi!");
             } catch (ClassNotFoundException e) {
                 throw new SQLException("MySQL JDBC Driver tidak ditemukan", e);

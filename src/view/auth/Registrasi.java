@@ -15,6 +15,7 @@ public class Registrasi extends JFrame {
     private final JPasswordField txtConfirmPassword;
     private final JTextField txtNama;
     private final JTextField txtEmail;
+    private final JTextField txtNoTelp;
     private final JTextArea txtAlamat;
     private final JRadioButton rbPria;
     private final JRadioButton rbWanita;
@@ -27,6 +28,7 @@ public class Registrasi extends JFrame {
         txtConfirmPassword = new JPasswordField(FIELD_WIDTH);
         txtNama = new JTextField(FIELD_WIDTH);
         txtEmail = new JTextField(FIELD_WIDTH);
+        txtNoTelp = new JTextField(FIELD_WIDTH);
         txtAlamat = new JTextArea(TEXT_AREA_ROWS, FIELD_WIDTH);
         rbPria = new JRadioButton("Pria");
         rbWanita = new JRadioButton("Wanita");
@@ -148,13 +150,25 @@ public class Registrasi extends JFrame {
         txtEmail.setFont(fieldFont);
         gbc.gridx = 1;
         mainPanel.add(txtEmail, gbc);
+        
+        // No Telp
+        JLabel lblNoTelp = new JLabel("No Telp:");
+        lblNoTelp.setFont(labelFont);
+        gbc.gridx = 0;
+        gbc.gridy = 6;
+        mainPanel.add(lblNoTelp, gbc);
+
+        txtNoTelp.setFont(fieldFont);
+        gbc.gridx = 1;
+        mainPanel.add(txtNoTelp, gbc);
     }
 
     private void addGenderSelection(JPanel mainPanel, GridBagConstraints gbc) {
         JLabel lblGender = new JLabel("Jenis Kelamin:");
         lblGender.setFont(new Font("Arial", Font.PLAIN, 12));
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
+
         mainPanel.add(lblGender, gbc);
 
         JPanel genderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -178,7 +192,8 @@ public class Registrasi extends JFrame {
         JLabel lblAlamat = new JLabel("Alamat:");
         lblAlamat.setFont(new Font("Arial", Font.PLAIN, 12));
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 8;
+
         mainPanel.add(lblAlamat, gbc);
 
         txtAlamat.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -204,7 +219,8 @@ public class Registrasi extends JFrame {
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 8;
+        gbc.gridy = 9;
+
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         mainPanel.add(buttonPanel, gbc);
@@ -295,6 +311,7 @@ public class Registrasi extends JFrame {
     }
 
     private void registerUser() {
+
         try {
             // Validasi input
             if (!validateInput()) {
@@ -312,6 +329,20 @@ public class Registrasi extends JFrame {
             String otp = util.OtpGenerator.generateOTP();
             
             // Tampilkan OTP (dalam aplikasi nyata, ini akan dikirim ke email)
+
+      
+
+        User user = new User();
+        user.setUsername(username);
+        user.setName(name);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setNoTelp(noTelp);
+        user.setAlamat(alamat);
+        user.setJenisKelamin(jenisKelamin);
+
+        if (user.save()) {
+
             JOptionPane.showMessageDialog(this,
                     "Kode OTP telah dikirim ke email: " + email + "\n" +
                     "Kode OTP: " + otp + "\n\n" +
@@ -366,6 +397,7 @@ public class Registrasi extends JFrame {
         txtNama.setText("");
         txtEmail.setText("");
         txtAlamat.setText("");
+        txtNoTelp.setText("");
         ButtonGroup bg = new ButtonGroup();
         bg.add(rbPria);
         bg.add(rbWanita);

@@ -7,19 +7,22 @@ import java.sql.SQLException;
 import db.MySqlConnection;
 
 public class User {
-    private Integer id;
+    private int id;
     private String username;
-    private String password;
-    private String nama;
+    private String name;
     private String email;
+    private String password;
+    private String noTelp;
     private String jenisKelamin;
     private String alamat;
+    private String ktp;
+    private String kk;
 
     // Constructor
     public User() {}
     
     // Getters
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
@@ -27,18 +30,22 @@ public class User {
         return username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public String getNama() {
-        return nama;
+    public String getName() {
+        return name;
     }
 
     public String getEmail() {
         return email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public String getNoTelp() {
+        return noTelp;
+    }
+    
     public String getJenisKelamin() {
         return jenisKelamin;
     }
@@ -46,22 +53,38 @@ public class User {
     public String getAlamat() {
         return alamat;
     }
+    
+    public String getKtp() {
+        return ktp;
+    }
+    
+    public String getKk() {
+        return ktp;
+    }
 
     // Setters
+    public void setId(String id) {
+        this.id = Integer.parseInt(id);
+    }
+
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public void setNama(String nama) {
-        this.nama = nama;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setNoTelp(String noTelp) {
+        this.noTelp = noTelp;
     }
 
     public void setJenisKelamin(String jenisKelamin) {
@@ -70,6 +93,14 @@ public class User {
 
     public void setAlamat(String alamat) {
         this.alamat = alamat;
+    }
+    
+    public void setKtp(String ktp) {
+        this.ktp = ktp;
+    }
+    
+    public void setKk(String kk) {
+        this.kk = kk;
     }
 
     public static User authenticate(String userInput, String password) {
@@ -89,9 +120,10 @@ public class User {
             if (rs.next()) {
                 User user = new User();
                 user.setUsername(rs.getString("username"));
-                user.setNama(rs.getString("nama"));
+                user.setName(rs.getString("name"));
                 user.setEmail(rs.getString("email"));
-                user.setJenisKelamin(rs.getString("jenisKelamin"));
+                user.setNoTelp(rs.getString("no_telp"));
+                user.setJenisKelamin(rs.getString("jenis_kelamin"));
                 user.setAlamat(rs.getString("alamat"));
                 return user;
             }
@@ -138,15 +170,17 @@ public class User {
             }
             
             // Insert user baru
-            String insertQuery = "INSERT INTO users (username, password, nama, email, jenisKelamin, alamat) " +
-                               "VALUES (?, ?, ?, ?, ?, ?)";
+            String insertQuery = "INSERT INTO users (username, name, email, password, no_telp, jenis_kelamin, alamat) " +
+                               "VALUES (?, ?, ?, ?, ?, ?, ?)";
             insertStmt = conn.prepareStatement(insertQuery);
             insertStmt.setString(1, this.username);
-            insertStmt.setString(2, this.password);
-            insertStmt.setString(3, this.nama);
-            insertStmt.setString(4, this.email);
-            insertStmt.setString(5, this.jenisKelamin);
-            insertStmt.setString(6, this.alamat);
+            insertStmt.setString(2, this.name);
+            insertStmt.setString(3, this.email);
+            insertStmt.setString(4, this.password);
+            insertStmt.setString(5, this.noTelp);
+            insertStmt.setString(6, this.jenisKelamin);
+            insertStmt.setString(7, this.alamat);
+
             
             int result = insertStmt.executeUpdate();
             conn.commit(); // Commit transaksi
@@ -175,6 +209,32 @@ public class User {
             } catch (SQLException e) {
                 System.err.println("Error menutup resources: " + e.getMessage());
             }
+        }
+    }
+    
+    public void updatePhoto(int id, String ktp, String kk) {
+        Connection conn = null;
+        PreparedStatement updateStmt = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = MySqlConnection.getConnection();
+            conn.setAutoCommit(false); // Mulai transaksi
+            
+            String updateQuery = "UPDATE users SET ktp = ?, kk = ? WHERE id = ?";
+            updateStmt = conn.prepareStatement(updateQuery);
+            updateStmt.setString(1, ktp);
+            updateStmt.setString(2, kk);
+            updateStmt.setString(3, Integer.toString(id));
+            
+            int result = updateStmt.executeUpdate();
+            conn.commit(); // Commit transaksi
+            
+            if (result > 0) {
+                System.out.println("Path file gambar berhasil disimpan");
+            }
+        } catch(SQLException e) {
+            System.err.println("Error: " + e);
         }
     }
 }
