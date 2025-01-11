@@ -1,9 +1,8 @@
 package view.auth;
 
 import javax.swing.*;
-
 import model.User;
-
+import util.OtpGenerator;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -312,13 +311,26 @@ public class Registrasi extends JFrame {
     }
 
     private void registerUser() {
-        String username = txtUsername.getText().trim();
-        String password = new String(txtPassword.getPassword());
-        String name = txtNama.getText().trim();
-        String email = txtEmail.getText().trim();
-        String noTelp = txtNoTelp.getText().trim();
-        String alamat = txtAlamat.getText().trim();
-        String jenisKelamin = rbPria.isSelected() ? "Pria" : "Wanita";
+
+        try {
+            // Validasi input
+            if (!validateInput()) {
+                return;
+            }
+
+            String username = txtUsername.getText().trim();
+            String password = new String(txtPassword.getPassword());
+            String nama = txtNama.getText().trim();
+            String email = txtEmail.getText().trim();
+            String alamat = txtAlamat.getText().trim();
+            String jenisKelamin = rbPria.isSelected() ? "Pria" : "Wanita";
+
+            // Generate OTP
+            String otp = util.OtpGenerator.generateOTP();
+            
+            // Tampilkan OTP (dalam aplikasi nyata, ini akan dikirim ke email)
+
+      
 
         User user = new User();
         user.setUsername(username);
@@ -330,15 +342,44 @@ public class Registrasi extends JFrame {
         user.setJenisKelamin(jenisKelamin);
 
         if (user.save()) {
-            JOptionPane.showMessageDialog(this,
-                    "Registrasi berhasil!\nSilakan login dengan akun Anda.",
-                    "Sukses",
-                    JOptionPane.INFORMATION_MESSAGE);
 
-            dispose();
-            new Login().setVisible(true);
-        } else {
-            showError("Gagal melakukan registrasi! Username atau email mungkin sudah terdaftar.");
+            JOptionPane.showMessageDialog(this,
+                    "Kode OTP telah dikirim ke email: " + email + "\n" +
+                    "Kode OTP: " + otp + "\n\n" +
+                    "(Dalam aplikasi nyata, kode ini akan dikirim via email)",
+                    "Verifikasi Email",
+                    JOptionPane.INFORMATION_MESSAGE);
+            
+            // Tampilkan dialog verifikasi OTP
+            OtpDialog otpDialog = new OtpDialog(this, otp);
+            otpDialog.setVisible(true);
+            
+            // Proses setelah verifikasi OTP
+            if (otpDialog.isVerified()) {
+                User user = new User();
+                user.setUsername(username);
+                user.setPassword(password);
+                user.setNama(nama);
+                user.setEmail(email);
+                user.setAlamat(alamat);
+                user.setJenisKelamin(jenisKelamin);
+
+                if (user.save()) {
+                    JOptionPane.showMessageDialog(this,
+                            "Registrasi berhasil!\nSilakan login dengan akun Anda.",
+                            "Sukses",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
+                    new Login().setVisible(true);
+                } else {
+                    showError("Gagal melakukan registrasi! Username atau email mungkin sudah terdaftar.");
+                }
+            } else {
+                showError("Verifikasi email dibatalkan atau gagal. Silakan coba lagi.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Terjadi kesalahan: " + e.getMessage());
         }
     }
 
