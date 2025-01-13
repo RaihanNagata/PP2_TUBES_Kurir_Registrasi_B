@@ -41,7 +41,7 @@ public class UserDao {
     
     try (Connection connection = MySqlConnection.getConnection();) {
       PreparedStatement statement = connection.prepareStatement(
-          "update users set username = ?, name = ?, email = ?, password = ?, no_telp = ?, jenis_kelamin = ?, alamat = ?, ktp = ?, kk = ? where id = ?");
+          "update users set username = ?, name = ?, email = ?, password = ?, no_telp = ?, jenis_kelamin = ?, alamat = ? where id = ?");
       statement.setString(1, user.getUsername());
       statement.setString(2, user.getName());
       statement.setString(3, user.getEmail());
@@ -49,8 +49,6 @@ public class UserDao {
       statement.setString(5, user.getNoTelp());
       statement.setString(6, user.getJenisKelamin());
       statement.setString(7, user.getAlamat());
-      statement.setString(8, user.getKtp());
-      statement.setString(9, user.getKk());
       statement.setString(10, Integer.toString(user.getId()));
 
       result = statement.executeUpdate();
@@ -73,7 +71,7 @@ public class UserDao {
     }
     return result;
   }
-    
+  
   public List<User> findAll() {
     List<User> list = new ArrayList<>();
     try (Connection connection = MySqlConnection.getConnection();
@@ -97,5 +95,53 @@ public class UserDao {
       e.printStackTrace();
     }
     return list;
+  }
+    
+  public List<User> find(int id) {
+    List<User> list = new ArrayList<>();
+    try (Connection connection = MySqlConnection.getConnection()) {
+        PreparedStatement statement = connection.prepareStatement("select * from users where id = ?");
+        statement.setString(1, Integer.toString(id));
+      try (ResultSet resultSet = statement.executeQuery();) {
+        while (resultSet.next()) {
+            User user = new User();
+            user.setId(resultSet.getString("id"));
+            user.setUsername(resultSet.getString("username"));
+            user.setName(resultSet.getString("name"));
+            user.setEmail(resultSet.getString("email"));
+            user.setNoTelp(resultSet.getString("no_telp"));
+            user.setJenisKelamin(resultSet.getString("jenis_kelamin"));
+            user.setAlamat(resultSet.getString("alamat"));
+            list.add(user);
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return list;
+  }
+  
+  public int findIdByEmail(String email) {
+    User user = new User();
+    try (Connection connection = MySqlConnection.getConnection()) {
+        PreparedStatement statement = connection.prepareStatement("select id from users where email = ?");
+        statement.setString(1, email);
+      try (ResultSet resultSet = statement.executeQuery();) {
+        if (resultSet.next()) {
+            // If a row is found, retrieve the ID and set it to the user object
+            user.setId(resultSet.getString("id"));
+        } else {
+            // No result found, handle the case if needed (e.g., logging)
+            System.out.println("No user found with the email: " + email);
+        }
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return user.getId();
   }
 }

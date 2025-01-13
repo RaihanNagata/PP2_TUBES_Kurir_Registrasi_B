@@ -324,6 +324,7 @@ public class Registrasi extends JFrame {
             String email = txtEmail.getText().trim();
             String alamat = txtAlamat.getText().trim();
             String jenisKelamin = rbPria.isSelected() ? "Pria" : "Wanita";
+            String noTelp = txtNoTelp.getText().trim();
 
             // Generate OTP
             String otp = util.OtpGenerator.generateOTP();
@@ -334,7 +335,7 @@ public class Registrasi extends JFrame {
 
         User user = new User();
         user.setUsername(username);
-        user.setName(name);
+        user.setName(nama);
         user.setEmail(email);
         user.setPassword(password);
         user.setNoTelp(noTelp);
@@ -356,13 +357,14 @@ public class Registrasi extends JFrame {
             
             // Proses setelah verifikasi OTP
             if (otpDialog.isVerified()) {
-                User user = new User();
-                user.setUsername(username);
-                user.setPassword(password);
-                user.setNama(nama);
-                user.setEmail(email);
-                user.setAlamat(alamat);
-                user.setJenisKelamin(jenisKelamin);
+                User userOtp = new User();
+                userOtp.setUsername(username);
+                userOtp.setPassword(password);
+                userOtp.setName(nama);
+                userOtp.setEmail(email);
+                userOtp.setAlamat(alamat);
+                userOtp.setNoTelp(noTelp);
+                userOtp.setJenisKelamin(jenisKelamin);
 
                 if (user.save()) {
                     JOptionPane.showMessageDialog(this,
@@ -377,6 +379,7 @@ public class Registrasi extends JFrame {
             } else {
                 showError("Verifikasi email dibatalkan atau gagal. Silakan coba lagi.");
             }
+        }
         } catch (Exception e) {
             e.printStackTrace();
             showError("Terjadi kesalahan: " + e.getMessage());

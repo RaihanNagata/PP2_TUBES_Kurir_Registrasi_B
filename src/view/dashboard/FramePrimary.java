@@ -4,6 +4,7 @@
  */
 package view.dashboard;
 
+import model.User;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +16,7 @@ import javax.swing.*;
  */
 public class FramePrimary extends JFrame {
     protected JPanel panelContent;
+    protected static User user;
     private JPanel curPanel;
     public FramePrimary() {
         // Tampilkan tomobol exit di pojok kanan atas
@@ -79,6 +81,14 @@ public class FramePrimary extends JFrame {
                 FramePrimary.this.repaint();
             }
         });
+    }
+    
+    public void setUserLogin(User user) {
+        this.user = user;
+    }
+    
+    public User getUserLogin() {
+        return this.user;
     }
     
     public static void main(String[] args) {

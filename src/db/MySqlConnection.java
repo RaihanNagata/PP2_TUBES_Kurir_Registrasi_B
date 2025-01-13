@@ -15,7 +15,7 @@ import java.sql.SQLException;
 public class MySqlConnection {
 
     // Tambahkan nama database pada url
-    private final static String DB_URL = "jdbc:mysql://localhost:3306/TubesPP2";
+    private final static String DB_URL = "jdbc:mysql://localhost:3306/TubesPP";
     // Isi dengan nama user yang memiliki access ke database
     private final static String DB_USER = "root";
     // Isi dengan password milik user tersebut

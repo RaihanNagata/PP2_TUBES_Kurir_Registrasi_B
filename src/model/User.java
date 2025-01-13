@@ -212,20 +212,25 @@ public class User {
         }
     }
     
-    public void updatePhoto(int id, String ktp, String kk) {
+    public void updateFoto(int id, String jenisFoto, String foto) {
         Connection conn = null;
         PreparedStatement updateStmt = null;
         ResultSet rs = null;
+        String updateQuery;
         
         try {
             conn = MySqlConnection.getConnection();
             conn.setAutoCommit(false); // Mulai transaksi
-            
-            String updateQuery = "UPDATE users SET ktp = ?, kk = ? WHERE id = ?";
+            if (jenisFoto.equalsIgnoreCase("kk")) {
+                updateQuery = "UPDATE users SET kk = ? WHERE id = ?";
+            } else if (jenisFoto.equalsIgnoreCase("ktp")) {
+                updateQuery = "UPDATE users SET ktp = ? WHERE id = ?";
+            } else {
+                updateQuery = "UPDATE users SET ktp = ? WHERE id = ?";
+            }
             updateStmt = conn.prepareStatement(updateQuery);
-            updateStmt.setString(1, ktp);
-            updateStmt.setString(2, kk);
-            updateStmt.setString(3, Integer.toString(id));
+            updateStmt.setString(1, foto);
+            updateStmt.setString(2, Integer.toString(id));
             
             int result = updateStmt.executeUpdate();
             conn.commit(); // Commit transaksi

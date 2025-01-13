@@ -4,6 +4,8 @@
  */
 package view.dashboard;
 
+import model.User;
+import dao.UserDao;
 import java.awt.*;
 import javax.swing.*;
 
@@ -14,9 +16,12 @@ import javax.swing.*;
 public class FrameDashboard extends FramePrimary {
     public FrameDashboard() {
         super.panelContent = new JPanel();
+        panelContent.setLayout(new BorderLayout());
         
         JLabel lJudul = new JLabel("Dashboard", JLabel.CENTER);
+        JLabel lContent = new JLabel("Selamat datang, " + super.user.getName(), JLabel.CENTER);
         
-        panelContent.add(lJudul);
+        panelContent.add(lJudul, BorderLayout.NORTH);
+        panelContent.add(lContent, BorderLayout.CENTER);
     }
 }
