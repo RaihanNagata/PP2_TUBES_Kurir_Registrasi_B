@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import model.User;
+import dao.UserDao;
 import view.dashboard.*;
 
 public class Login extends JFrame {
@@ -126,7 +127,10 @@ public class Login extends JFrame {
             this.dispose();
             // Di sini Anda bisa menambahkan kode untuk membuka form utama
             // dan menyimpan data user yang sedang login
+            user.setId(Integer.toString(new UserDao().findIdByEmail(userInput)));
             FramePrimary dashboard = new FramePrimary();
+            dashboard.setUserLogin(user);
+            
             dashboard.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this,

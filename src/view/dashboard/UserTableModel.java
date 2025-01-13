@@ -13,7 +13,7 @@ import model.User;
  * @author Haida
  */
 class UserTableModel extends AbstractTableModel {
-    private String[] columnNames = {"Id", "Username", "Name", "Email", "No Telp", "Jenis Kelamin", "Alamat", "KTP", "KK"};
+    private String[] columnNames = {"Id", "Username", "Name", "Email", "No Telp", "Jenis Kelamin", "Alamat"};
     private List<User> data;
     
     public UserTableModel(List<User> data) {
@@ -56,13 +56,6 @@ class UserTableModel extends AbstractTableModel {
                 break;
             case 6:
                 value = rowItem.getAlamat();
-                break;
-            case 7:
-                value = rowItem.getKtp();
-                break;
-            case 8:
-                System.out.println(rowItem.getKk());
-                value = rowItem.getKk();
                 break;
         }
         return value;
