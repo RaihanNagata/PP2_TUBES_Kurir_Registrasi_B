@@ -63,7 +63,7 @@ public class Registrasi extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        
+
         // Menambahkan judul
         addTitle(mainPanel, gbc);
 
@@ -94,7 +94,7 @@ public class Registrasi extends JFrame {
         // Mengatur ukuran font yang konsisten
         Font labelFont = new Font("Arial", Font.PLAIN, 12);
         Font fieldFont = new Font("Arial", Font.PLAIN, 12);
-        
+
         // Username
         JLabel lblUsername = new JLabel("Username:");
         lblUsername.setFont(labelFont);
@@ -150,7 +150,7 @@ public class Registrasi extends JFrame {
         txtEmail.setFont(fieldFont);
         gbc.gridx = 1;
         mainPanel.add(txtEmail, gbc);
-        
+
         // No Telp
         JLabel lblNoTelp = new JLabel("No Telp:");
         lblNoTelp.setFont(labelFont);
@@ -174,12 +174,12 @@ public class Registrasi extends JFrame {
         JPanel genderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         rbPria.setFont(new Font("Arial", Font.PLAIN, 12));
         rbWanita.setFont(new Font("Arial", Font.PLAIN, 12));
-        
+
         // Membuat button group
         ButtonGroup bgGender = new ButtonGroup();
         bgGender.add(rbPria);
         bgGender.add(rbWanita);
-        
+
         genderPanel.add(rbPria);
         genderPanel.add(Box.createHorizontalStrut(10)); // Memberikan jarak antara radio button
         genderPanel.add(rbWanita);
@@ -199,10 +199,10 @@ public class Registrasi extends JFrame {
         txtAlamat.setFont(new Font("Arial", Font.PLAIN, 12));
         txtAlamat.setLineWrap(true);
         txtAlamat.setWrapStyleWord(true);
-        
+
         JScrollPane scrollPane = new JScrollPane(txtAlamat);
         scrollPane.setPreferredSize(new Dimension(200, 60));
-        
+
         gbc.gridx = 1;
         mainPanel.add(scrollPane, gbc);
     }
@@ -328,33 +328,31 @@ public class Registrasi extends JFrame {
 
             // Generate OTP
             String otp = util.OtpGenerator.generateOTP();
-            
+
             // Tampilkan OTP (dalam aplikasi nyata, ini akan dikirim ke email)
 
-      
+            // User user = new User();
+            // user.setUsername(username);
+            // user.setName(nama);
+            // user.setEmail(email);
+            // user.setPassword(password);
+            // user.setNoTelp(noTelp);
+            // user.setAlamat(alamat);
+            // user.setJenisKelamin(jenisKelamin);
 
-        User user = new User();
-        user.setUsername(username);
-        user.setName(nama);
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setNoTelp(noTelp);
-        user.setAlamat(alamat);
-        user.setJenisKelamin(jenisKelamin);
-
-        if (user.save()) {
+            // if (user.save()) {
 
             JOptionPane.showMessageDialog(this,
                     "Kode OTP telah dikirim ke email: " + email + "\n" +
-                    "Kode OTP: " + otp + "\n\n" +
-                    "(Dalam aplikasi nyata, kode ini akan dikirim via email)",
+                            "Kode OTP: " + otp + "\n\n" +
+                            "(Dalam aplikasi nyata, kode ini akan dikirim via email)",
                     "Verifikasi Email",
                     JOptionPane.INFORMATION_MESSAGE);
-            
+
             // Tampilkan dialog verifikasi OTP
             OtpDialog otpDialog = new OtpDialog(this, otp);
             otpDialog.setVisible(true);
-            
+
             // Proses setelah verifikasi OTP
             if (otpDialog.isVerified()) {
                 User userOtp = new User();
@@ -366,12 +364,12 @@ public class Registrasi extends JFrame {
                 userOtp.setNoTelp(noTelp);
                 userOtp.setJenisKelamin(jenisKelamin);
 
-                if (user.save()) {
+                if (userOtp.save()) {
                     JOptionPane.showMessageDialog(this,
                             "Registrasi berhasil!\nSilakan login dengan akun Anda.",
                             "Sukses",
                             JOptionPane.INFORMATION_MESSAGE);
-                    dispose();
+                    this.dispose();
                     new Login().setVisible(true);
                 } else {
                     showError("Gagal melakukan registrasi! Username atau email mungkin sudah terdaftar.");
@@ -379,7 +377,7 @@ public class Registrasi extends JFrame {
             } else {
                 showError("Verifikasi email dibatalkan atau gagal. Silakan coba lagi.");
             }
-        }
+            // }
         } catch (Exception e) {
             e.printStackTrace();
             showError("Terjadi kesalahan: " + e.getMessage());
@@ -414,7 +412,8 @@ public class Registrasi extends JFrame {
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException
+                | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
 

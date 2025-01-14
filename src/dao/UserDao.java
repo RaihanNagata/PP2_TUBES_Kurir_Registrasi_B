@@ -34,7 +34,7 @@ public class UserDao {
 
     try (Connection connection = MySqlConnection.getConnection();) {
       PreparedStatement statement = connection.prepareStatement(
-          "update users set username = ?, name = ?, email = ?, password = ?, no_telp = ?, jenis_kelamin = ?, alamat = ? where id = ?");
+          "update users set username = ?, name = ?, email = ?, password = ?, no_telp = ?, jenis_kelamin = ?, alamat = ?, ktp = ?, kk = ? where id = ?");
       statement.setString(1, user.getUsername());
       statement.setString(2, user.getName());
       statement.setString(3, user.getEmail());
@@ -42,7 +42,9 @@ public class UserDao {
       statement.setString(5, user.getNoTelp());
       statement.setString(6, user.getJenisKelamin());
       statement.setString(7, user.getAlamat());
-      statement.setString(8, Integer.toString(user.getId()));
+      statement.setString(8, user.getKtp());
+      statement.setString(9, user.getKk());
+      statement.setString(10, Integer.toString(user.getId()));
 
       result = statement.executeUpdate();
     } catch (SQLException e) {

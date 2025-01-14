@@ -1,21 +1,31 @@
 package view.dashboard;
 
-import model.User;
 import dao.UserDao;
 import java.awt.*;
 import view.auth.Login;
 import view.auth.ForgotPassword;
-
 import java.awt.event.*;
 import java.io.File;
-import java.util.List;
+import java.util.List; // Impor halaman ubah password
 import javax.swing.*;
+import javax.swing.table.TableModel;
+
+import model.User;
+import view.auth.ChangePassword;
+import view.auth.Login;
 
 /**
  *
  * @author Haida
  */
 public class FrameAccount extends FramePrimary {
+    private FramePrimary parent;
+    private List<User> data;
+    private UserDao userDao;
+    private UserTableModel tableModel;
+    private String pathKk, pathKtp;
+    private JScrollPane scrollableTable;
+    private JTable table;
     private final FramePrimary parent;
     private final List<User> data;
     private final UserDao userDao;
@@ -30,9 +40,9 @@ public class FrameAccount extends FramePrimary {
         this.data = userDao.find(super.user.getId());
 
         JLabel lJudul = new JLabel("Account", JLabel.CENTER);
-        JTable table = new JTable();
+        table = new JTable();
         tableModel = new UserTableModel(data);
-        JScrollPane scrollableTable = new JScrollPane(table);
+        scrollableTable = new JScrollPane(table);
         table.setModel(tableModel);
         JPanel panelBtn = new JPanel();
         panelBtn.setLayout(new FlowLayout());
@@ -206,6 +216,17 @@ public class FrameAccount extends FramePrimary {
                 user.setJenisKelamin(rbPria.isSelected() ? "Pria" : "Wanita");
 
                 userDao.update(user);
+                FrameAccount.this.data = userDao.find(FrameAccount.super.user.getId());
+                table.setModel(new UserTableModel(data));
+                FrameAccount.this.revalidate();
+                FrameAccount.this.repaint();
+                /*
+                 * JOptionPane.showMessageDialog(this,
+                 * "Perbarui profil berhasil!\nSilakan login dengan akun Anda.",
+                 * "Sukses",
+                 * JOptionPane.INFORMATION_MESSAGE);
+                 */
+                dispose();
             }
         });
 
@@ -213,7 +234,7 @@ public class FrameAccount extends FramePrimary {
     }
 
     public void addPhoto() {
-        User user = data.get(data.size() - 1);
+        // User user = data.get(data.size() - 1);
         JFrame framePhoto = new JFrame("Foto KTP & KK");
         framePhoto.setLayout(new GridLayout(1, 2));
         framePhoto.setSize(600, 600);
@@ -254,6 +275,8 @@ public class FrameAccount extends FramePrimary {
             File selectedFile = fcKk.getSelectedFile();
             String filePath = selectedFile.getAbsolutePath(); // Get the absolute path of the selected file
             user.updateFoto(user.getId(), "kk", filePath);
+            // super.user.updateFoto(user.getId(), "kk", filePath);
+            // super.user = userDao.find(super.user.getId()).getFirst();
             ImageIcon imgKk = new ImageIcon(filePath);
             Image image = imgKk.getImage(); // Get the image from ImageIcon
             Image scaledImage = image.getScaledInstance(400, 400, Image.SCALE_SMOOTH); // Scale the image to fit the
