@@ -13,7 +13,7 @@ public class Login extends JFrame {
     private JButton btnLogin;
     private JButton btnRegis;
     private JButton btnCancel;
-    private JButton btnForgotPassword; // Tambahkan tombol lupa password
+    private JButton btnForgotPassword;
     private JPanel mainPanel;
 
     public Login() {
@@ -26,7 +26,7 @@ public class Login extends JFrame {
 
     private void initializeFrame() {
         setTitle("Login Aplikasi");
-        setSize(400, 300); // Sesuaikan ukuran jendela untuk kenyamanan
+        setSize(600, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }
@@ -40,13 +40,22 @@ public class Login extends JFrame {
         btnLogin = new JButton("Login");
         btnRegis = new JButton("Register");
         btnCancel = new JButton("Cancel");
-        btnForgotPassword = new JButton("Lupa Password"); // Buat tombol lupa password
+        btnForgotPassword = new JButton("Lupa Password");
+        // Hilangkan border
+        btnForgotPassword.setBorderPainted(false);
+        // Hilangkan background
+        btnForgotPassword.setFocusPainted(false);
+        btnForgotPassword.setContentAreaFilled(false);
+        // Set warna teks agar seperti link (opsional)
+        btnForgotPassword.setForeground(Color.BLACK);
+        // Set kursor menjadi 'hand'
+        btnForgotPassword.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
     private void setupLayout() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Isi ruang horizontal yang tersedia
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
         JLabel lblTitle = new JLabel("Login");
         lblTitle.setFont(new Font("Arial", Font.BOLD, 20));
@@ -63,7 +72,7 @@ public class Login extends JFrame {
         buttonPanel.add(btnLogin);
         buttonPanel.add(btnRegis);
         buttonPanel.add(btnCancel);
-        buttonPanel.add(btnForgotPassword); // Tambahkan tombol lupa password
+        buttonPanel.add(btnForgotPassword);
 
         gbc.gridx = 0;
         gbc.gridy = 3;
@@ -89,7 +98,7 @@ public class Login extends JFrame {
         btnLogin.addActionListener(_ -> validateLogin());
         btnRegis.addActionListener(_ -> handleRegist());
         btnCancel.addActionListener(_ -> System.exit(0));
-        btnForgotPassword.addActionListener(_ -> handleForgotPassword()); // Tambahkan listener untuk tombol lupa password
+        btnForgotPassword.addActionListener(_ -> handleForgotPassword());
 
         KeyListener enterKeyListener = new KeyAdapter() {
             @Override
@@ -125,12 +134,9 @@ public class Login extends JFrame {
 
             clearForm();
             this.dispose();
-            // Di sini Anda bisa menambahkan kode untuk membuka form utama
-            // dan menyimpan data user yang sedang login
             user.setId(Integer.toString(new UserDao().findIdByEmailOrUsername(userInput)));
             FramePrimary dashboard = new FramePrimary();
             dashboard.setUserLogin(user);
-            
             dashboard.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(this,
@@ -141,18 +147,15 @@ public class Login extends JFrame {
             txtPassword.requestFocus();
         }
     }
-    
+
     private void handleRegist() {
         dispose();
         new Registrasi().setVisible(true);
     }
 
     private void handleForgotPassword() {
-        // Logika untuk menangani lupa password, misalnya mengirim email reset password
-        JOptionPane.showMessageDialog(this,
-                "Fitur lupa password belum diimplementasikan.",
-                "Lupa Password",
-                JOptionPane.INFORMATION_MESSAGE);
+        dispose();
+        new ForgotPassword().setVisible(true);
     }
 
     private void clearForm() {
@@ -160,16 +163,4 @@ public class Login extends JFrame {
         txtPassword.setText("");
         txtUserEmail.requestFocus();
     }
-
-    /*public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-
-        SwingUtilities.invokeLater(() -> {
-            new Login().setVisible(true);
-        });
-    }*/
 }
