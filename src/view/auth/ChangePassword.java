@@ -13,8 +13,10 @@ public class ChangePassword extends JFrame {
     private JButton btnChange;
     private JButton btnCancel;
     private JPanel mainPanel;
+    private User user;
 
-    public ChangePassword() {
+    public ChangePassword(User user) {
+        this.user = user;
         initializeFrame();
         createComponents();
         setupLayout();
@@ -109,8 +111,8 @@ public class ChangePassword extends JFrame {
             return;
         }
 
-        User user = User.getCurrentUser(); // Dapatkan pengguna yang sedang login
-        if (user != null && user.authenticate(user.getUsername(), oldPassword)) {
+        //User user = new User().getCurrentUser(); // Dapatkan pengguna yang sedang login
+        if (user != null && user.authenticate(txtOldPassword.getText(), oldPassword) != null) {
             user.setPassword(newPassword);
             UserDao userDao = new UserDao();
             userDao.update(user);
@@ -130,7 +132,7 @@ public class ChangePassword extends JFrame {
         }
     }
 
-    public static void main(String[] args) {
+   /*public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
@@ -140,5 +142,5 @@ public class ChangePassword extends JFrame {
         SwingUtilities.invokeLater(() -> {
             new ChangePassword().setVisible(true);
         });
-    }
+    }*/
 }
