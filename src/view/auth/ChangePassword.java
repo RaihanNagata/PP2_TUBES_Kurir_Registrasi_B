@@ -1,22 +1,23 @@
 package view.auth;
 
-import model.User;
 import dao.UserDao;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ChangePassword extends JFrame {
-    private JPasswordField txtOldPassword;
     private JPasswordField txtNewPassword;
     private JPasswordField txtConfirmPassword;
     private JButton btnChange;
     private JButton btnCancel;
     private JPanel mainPanel;
-    private User user;
+    private final String email;
 
-    public ChangePassword(User user) {
-        this.user = user;
+    public ChangePassword(String email) {
+        this.email = email;
         initializeFrame();
         createComponents();
         setupLayout();
@@ -26,7 +27,7 @@ public class ChangePassword extends JFrame {
 
     private void initializeFrame() {
         setTitle("Ubah Password");
-        setSize(400, 300); // Sesuaikan ukuran jendela untuk kenyamanan
+        setSize(400, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
     }
@@ -35,7 +36,6 @@ public class ChangePassword extends JFrame {
         mainPanel = new JPanel(new GridBagLayout());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        txtOldPassword = new JPasswordField(20);
         txtNewPassword = new JPasswordField(20);
         txtConfirmPassword = new JPasswordField(20);
         btnChange = new JButton("Ubah Password");
@@ -45,7 +45,7 @@ public class ChangePassword extends JFrame {
     private void setupLayout() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Isi ruang horizontal yang tersedia
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
         JLabel lblTitle = new JLabel("Ubah Password");
         lblTitle.setFont(new Font("Arial", Font.BOLD, 20));
@@ -55,7 +55,6 @@ public class ChangePassword extends JFrame {
         gbc.anchor = GridBagConstraints.CENTER;
         mainPanel.add(lblTitle, gbc);
 
-        addFormField("Password Lama:", txtOldPassword, gbc, 1);
         addFormField("Password Baru:", txtNewPassword, gbc, 2);
         addFormField("Konfirmasi Password:", txtConfirmPassword, gbc, 3);
 
@@ -84,22 +83,13 @@ public class ChangePassword extends JFrame {
     }
 
     private void setupListeners() {
-        btnChange.addActionListener(_ -> handleChangePassword());
-        btnCancel.addActionListener(_ -> this.dispose());
+        btnChange.addActionListener(this::handleChangePassword);
+        btnCancel.addActionListener(_ -> new ForgotPassword().setVisible(true));
     }
 
-    private void handleChangePassword() {
-        String oldPassword = new String(txtOldPassword.getPassword());
+    private void handleChangePassword(ActionEvent e) {
         String newPassword = new String(txtNewPassword.getPassword());
         String confirmPassword = new String(txtConfirmPassword.getPassword());
-
-        if (oldPassword.isEmpty() || newPassword.isEmpty() || confirmPassword.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "Semua kolom harus diisi!",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
 
         if (!newPassword.equals(confirmPassword)) {
             JOptionPane.showMessageDialog(this,
@@ -111,36 +101,21 @@ public class ChangePassword extends JFrame {
             return;
         }
 
-        //User user = new User().getCurrentUser(); // Dapatkan pengguna yang sedang login
-        if (user != null && user.authenticate(txtOldPassword.getText(), oldPassword) != null) {
-            user.setPassword(newPassword);
+        try {
             UserDao userDao = new UserDao();
-            userDao.update(user);
+            if (userDao.updatePasswordByEmail(email, newPassword)) {
+                JOptionPane.showMessageDialog(this, "Password berhasil diubah!", "Sukses",
+                        JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
+                new Login().setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Gagal memperbarui password!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
 
-            JOptionPane.showMessageDialog(this,
-                    "Password berhasil diubah!",
-                    "Sukses",
-                    JOptionPane.INFORMATION_MESSAGE);
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this,
-                    "Password lama salah!",
-                    "Error",
+        } catch (SQLException ex) {
+            Logger.getLogger(ChangePassword.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Terjadi kesalahan: " + ex.getMessage(), "Error",
                     JOptionPane.ERROR_MESSAGE);
-            txtOldPassword.setText("");
-            txtOldPassword.requestFocus();
         }
     }
-
-   /*public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-
-        SwingUtilities.invokeLater(() -> {
-            new ChangePassword().setVisible(true);
-        });
-    }*/
 }

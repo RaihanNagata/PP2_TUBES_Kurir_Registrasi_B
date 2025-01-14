@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package dao;
 
 import db.MySqlConnection;
@@ -10,10 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import model.User;
 
-/**
- *
- * @author Haida
- */
 public class UserDao {
   public int insert(User user) {
     int result = -1;
@@ -38,7 +31,7 @@ public class UserDao {
 
   public int update(User user) {
     int result = -1;
-    
+
     try (Connection connection = MySqlConnection.getConnection();) {
       PreparedStatement statement = connection.prepareStatement(
           "update users set username = ?, name = ?, email = ?, password = ?, no_telp = ?, jenis_kelamin = ?, alamat = ?, ktp = ?, kk = ? where id = ?");
@@ -73,7 +66,7 @@ public class UserDao {
     }
     return result;
   }
-  
+
   public List<User> findAll() {
     List<User> list = new ArrayList<>();
     try (Connection connection = MySqlConnection.getConnection();
@@ -98,23 +91,23 @@ public class UserDao {
     }
     return list;
   }
-    
+
   public List<User> find(int id) {
     List<User> list = new ArrayList<>();
     try (Connection connection = MySqlConnection.getConnection()) {
-        PreparedStatement statement = connection.prepareStatement("select * from users where id = ?");
-        statement.setString(1, Integer.toString(id));
+      PreparedStatement statement = connection.prepareStatement("select * from users where id = ?");
+      statement.setString(1, Integer.toString(id));
       try (ResultSet resultSet = statement.executeQuery();) {
         while (resultSet.next()) {
-            User user = new User();
-            user.setId(resultSet.getString("id"));
-            user.setUsername(resultSet.getString("username"));
-            user.setName(resultSet.getString("name"));
-            user.setEmail(resultSet.getString("email"));
-            user.setNoTelp(resultSet.getString("no_telp"));
-            user.setJenisKelamin(resultSet.getString("jenis_kelamin"));
-            user.setAlamat(resultSet.getString("alamat"));
-            list.add(user);
+          User user = new User();
+          user.setId(resultSet.getString("id"));
+          user.setUsername(resultSet.getString("username"));
+          user.setName(resultSet.getString("name"));
+          user.setEmail(resultSet.getString("email"));
+          user.setNoTelp(resultSet.getString("no_telp"));
+          user.setJenisKelamin(resultSet.getString("jenis_kelamin"));
+          user.setAlamat(resultSet.getString("alamat"));
+          list.add(user);
         }
       } catch (SQLException e) {
         e.printStackTrace();
@@ -124,20 +117,21 @@ public class UserDao {
     }
     return list;
   }
-  
+
   public int findIdByEmailOrUsername(String emailOrUsername) {
     User user = new User();
     try (Connection connection = MySqlConnection.getConnection()) {
-        PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE (username = ? OR email = ?)");
-        statement.setString(1, emailOrUsername);
-        statement.setString(2, emailOrUsername);
+      PreparedStatement statement = connection
+          .prepareStatement("SELECT * FROM users WHERE (username = ? OR email = ?)");
+      statement.setString(1, emailOrUsername);
+      statement.setString(2, emailOrUsername);
       try (ResultSet resultSet = statement.executeQuery();) {
         if (resultSet.next()) {
-            // If a row is found, retrieve the ID and set it to the user object
-            user.setId(resultSet.getString("id"));
+          // If a row is found, retrieve the ID and set it to the user object
+          user.setId(resultSet.getString("id"));
         } else {
-            // No result found, handle the case if needed (e.g., logging)
-            System.out.println("No user found with the email: " + emailOrUsername);
+          // No result found, handle the case if needed (e.g., logging)
+          System.out.println("No user found with the email: " + emailOrUsername);
         }
       } catch (SQLException e) {
         e.printStackTrace();
@@ -146,5 +140,18 @@ public class UserDao {
       e.printStackTrace();
     }
     return user.getId();
+  }
+
+  public boolean updatePasswordByEmail(String email, String newPassword) throws SQLException {
+    int result = 0;
+    try (Connection connection = MySqlConnection.getConnection()) {
+      PreparedStatement statement = connection.prepareStatement(
+          "UPDATE users SET password = ? WHERE email = ?");
+      statement.setString(1, newPassword);
+      statement.setString(2, email);
+      result = statement.executeUpdate();
+    }
+    return result > 0;
+
   }
 }

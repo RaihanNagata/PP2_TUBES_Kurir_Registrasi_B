@@ -4,8 +4,6 @@
  */
 package view.dashboard;
 
-import model.User;
-import dao.UserDao;
 import java.awt.*;
 import javax.swing.*;
 

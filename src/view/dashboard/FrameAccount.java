@@ -2,6 +2,8 @@ package view.dashboard;
 
 import dao.UserDao;
 import java.awt.*;
+import view.auth.Login;
+import view.auth.ForgotPassword;
 import java.awt.event.*;
 import java.io.File;
 import java.util.List; // Impor halaman ubah password
@@ -24,6 +26,10 @@ public class FrameAccount extends FramePrimary {
     private String pathKk, pathKtp;
     private JScrollPane scrollableTable;
     private JTable table;
+    private final FramePrimary parent;
+    private final List<User> data;
+    private final UserDao userDao;
+    private final UserTableModel tableModel;
 
     public FrameAccount(FramePrimary parent) {
         super.panelContent = new JPanel();
@@ -302,7 +308,7 @@ public class FrameAccount extends FramePrimary {
 
     private void handleChangePassword() {
         // Alihkan ke halaman atau jendela ubah password
-        new ChangePassword(super.user).setVisible(true);
+        new ForgotPassword().setVisible(true);
     }
 
     public void logout() {
