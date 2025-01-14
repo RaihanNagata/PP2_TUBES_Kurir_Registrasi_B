@@ -283,7 +283,7 @@ public class FrameAccount extends FramePrimary {
 
     private void handleChangePassword() {
         // Alihkan ke halaman atau jendela ubah password
-        new ChangePassword().setVisible(true);
+        new ChangePassword(super.user).setVisible(true);
     }
 
     public void logout() {

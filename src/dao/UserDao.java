@@ -49,7 +49,7 @@ public class UserDao {
       statement.setString(5, user.getNoTelp());
       statement.setString(6, user.getJenisKelamin());
       statement.setString(7, user.getAlamat());
-      statement.setString(10, Integer.toString(user.getId()));
+      statement.setString(8, Integer.toString(user.getId()));
 
       result = statement.executeUpdate();
     } catch (SQLException e) {
@@ -123,18 +123,19 @@ public class UserDao {
     return list;
   }
   
-  public int findIdByEmail(String email) {
+  public int findIdByEmailOrUsername(String emailOrUsername) {
     User user = new User();
     try (Connection connection = MySqlConnection.getConnection()) {
-        PreparedStatement statement = connection.prepareStatement("select id from users where email = ?");
-        statement.setString(1, email);
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE (username = ? OR email = ?)");
+        statement.setString(1, emailOrUsername);
+        statement.setString(2, emailOrUsername);
       try (ResultSet resultSet = statement.executeQuery();) {
         if (resultSet.next()) {
             // If a row is found, retrieve the ID and set it to the user object
             user.setId(resultSet.getString("id"));
         } else {
             // No result found, handle the case if needed (e.g., logging)
-            System.out.println("No user found with the email: " + email);
+            System.out.println("No user found with the email: " + emailOrUsername);
         }
       } catch (SQLException e) {
         e.printStackTrace();

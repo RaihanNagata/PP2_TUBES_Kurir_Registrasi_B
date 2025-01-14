@@ -127,7 +127,7 @@ public class Login extends JFrame {
             this.dispose();
             // Di sini Anda bisa menambahkan kode untuk membuka form utama
             // dan menyimpan data user yang sedang login
-            user.setId(Integer.toString(new UserDao().findIdByEmail(userInput)));
+            user.setId(Integer.toString(new UserDao().findIdByEmailOrUsername(userInput)));
             FramePrimary dashboard = new FramePrimary();
             dashboard.setUserLogin(user);
             
@@ -161,7 +161,7 @@ public class Login extends JFrame {
         txtUserEmail.requestFocus();
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
@@ -171,5 +171,5 @@ public class Login extends JFrame {
         SwingUtilities.invokeLater(() -> {
             new Login().setVisible(true);
         });
-    }
+    }*/
 }

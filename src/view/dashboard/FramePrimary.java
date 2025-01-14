@@ -91,12 +91,12 @@ public class FramePrimary extends JFrame {
         return this.user;
     }
     
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 FramePrimary app = new FramePrimary();
                 app.setVisible(true);
             }
         });
-    }
+    }*/
 }
