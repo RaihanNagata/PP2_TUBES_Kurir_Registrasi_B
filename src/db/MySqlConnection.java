@@ -21,9 +21,9 @@ public class MySqlConnection {
     // Isi dengan password milik user tersebut
     private final static String DB_PASS = "";
     private static Connection connection;
-    
+
     private static MySqlConnection instance;
-    
+
     public static Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             try {

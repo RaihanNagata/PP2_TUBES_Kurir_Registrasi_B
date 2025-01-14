@@ -1,15 +1,16 @@
 package view.dashboard;
 
-import model.User;
 import dao.UserDao;
 import java.awt.*;
-import view.auth.Login;
-import view.auth.ChangePassword; // Impor halaman ubah password
 import java.awt.event.*;
 import java.io.File;
-import java.util.List;
+import java.util.List; // Impor halaman ubah password
 import javax.swing.*;
-import javax.swing.table.*;
+import javax.swing.table.TableModel;
+
+import model.User;
+import view.auth.ChangePassword;
+import view.auth.Login;
 
 /**
  *
@@ -21,6 +22,8 @@ public class FrameAccount extends FramePrimary {
     private UserDao userDao;
     private UserTableModel tableModel;
     private String pathKk, pathKtp;
+    private JScrollPane scrollableTable;
+    private JTable table;
 
     public FrameAccount(FramePrimary parent) {
         super.panelContent = new JPanel();
@@ -31,9 +34,9 @@ public class FrameAccount extends FramePrimary {
         this.data = userDao.find(super.user.getId());
 
         JLabel lJudul = new JLabel("Account", JLabel.CENTER);
-        JTable table = new JTable();
+        table = new JTable();
         tableModel = new UserTableModel(data);
-        JScrollPane scrollableTable = new JScrollPane(table);
+        scrollableTable = new JScrollPane(table);
         table.setModel(tableModel);
         JPanel panelBtn = new JPanel();
         panelBtn.setLayout(new FlowLayout());
@@ -46,7 +49,7 @@ public class FrameAccount extends FramePrimary {
         panelContent.add(lJudul, BorderLayout.NORTH);
         panelContent.add(scrollableTable, BorderLayout.CENTER);
         panelContent.add(panelBtn, BorderLayout.SOUTH);
-        
+
         panelBtn.add(btnDelAcc);
         panelBtn.add(btnEditAcc);
         panelBtn.add(btnAddPhoto);
@@ -56,7 +59,8 @@ public class FrameAccount extends FramePrimary {
         btnDelAcc.addActionListener(_ -> delAcc());
         btnEditAcc.addActionListener(_ -> editAcc());
         btnAddPhoto.addActionListener(_ -> addPhoto());
-        btnChangePassword.addActionListener(_ -> handleChangePassword()); // Tambahkan listener untuk tombol ubah password
+        btnChangePassword.addActionListener(_ -> handleChangePassword()); // Tambahkan listener untuk tombol ubah
+                                                                          // password
         btnLogout.addActionListener(_ -> logout());
     }
 
@@ -64,17 +68,17 @@ public class FrameAccount extends FramePrimary {
         userDao.delete(super.user);
 
         JOptionPane.showMessageDialog(null,
-            "Akun milik " + user.getName() + " berhasil di hapus",
-            "Delete Berhasil",
-            JOptionPane.INFORMATION_MESSAGE);
+                "Akun milik " + user.getName() + " berhasil di hapus",
+                "Delete Berhasil",
+                JOptionPane.INFORMATION_MESSAGE);
 
         parent.dispose();
         new Login().setVisible(true);
     }
-    
+
     public void editAcc() {
         GridBagConstraints gbc = new GridBagConstraints();
-        
+
         JFrame frameProfil = new JFrame("Profil " + super.user.getName());
         frameProfil.setLayout(new GridBagLayout());
         frameProfil.setSize(400, 500);
@@ -86,11 +90,11 @@ public class FrameAccount extends FramePrimary {
         JRadioButton rbPria = new JRadioButton("Pria");
         JRadioButton rbWanita = new JRadioButton("Wanita");
         JButton btnEdit = new JButton("Perbarui Profil");
-        
+
         // Mengatur ukuran font yang konsisten
         Font labelFont = new Font("Arial", Font.PLAIN, 12);
         Font fieldFont = new Font("Arial", Font.PLAIN, 12);
-        
+
         // Username
         JLabel lblUsername = new JLabel("Username:");
         lblUsername.setFont(labelFont);
@@ -127,7 +131,7 @@ public class FrameAccount extends FramePrimary {
         txtEmail.setText(user.getEmail());
         gbc.gridx = 1;
         frameProfil.add(txtEmail, gbc);
-        
+
         // No Telp
         JLabel lblNoTelp = new JLabel("No Telp:");
         lblNoTelp.setFont(labelFont);
@@ -139,7 +143,7 @@ public class FrameAccount extends FramePrimary {
         txtNoTelp.setText(user.getNoTelp());
         gbc.gridx = 1;
         frameProfil.add(txtNoTelp, gbc);
-        
+
         // Gender
         JLabel lblGender = new JLabel("Jenis Kelamin:");
         lblGender.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -151,16 +155,16 @@ public class FrameAccount extends FramePrimary {
         JPanel genderPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         rbPria.setFont(new Font("Arial", Font.PLAIN, 12));
         rbWanita.setFont(new Font("Arial", Font.PLAIN, 12));
-        
+
         // Membuat button group
         ButtonGroup bgGender = new ButtonGroup();
         bgGender.add(rbPria);
         bgGender.add(rbWanita);
-        
+
         genderPanel.add(rbPria);
         genderPanel.add(Box.createHorizontalStrut(10)); // Memberikan jarak antara radio button
         genderPanel.add(rbWanita);
-        
+
         if (user.getJenisKelamin().equalsIgnoreCase("pria")) {
             rbPria.setSelected(true);
         } else if (user.getJenisKelamin().equalsIgnoreCase("wanita")) {
@@ -171,7 +175,7 @@ public class FrameAccount extends FramePrimary {
 
         gbc.gridx = 1;
         frameProfil.add(genderPanel, gbc);
-        
+
         // Alamat
         JLabel lblAlamat = new JLabel("Alamat:");
         lblAlamat.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -184,36 +188,47 @@ public class FrameAccount extends FramePrimary {
         txtAlamat.setLineWrap(true);
         txtAlamat.setWrapStyleWord(true);
         txtAlamat.setText(user.getAlamat());
-        
+
         JScrollPane scrollPane = new JScrollPane(txtAlamat);
         scrollPane.setPreferredSize(new Dimension(200, 60));
-        
+
         gbc.gridx = 1;
         frameProfil.add(scrollPane, gbc);
-        
+
         gbc.gridy = 9;
         frameProfil.add(btnEdit, gbc);
-        
+
         btnEdit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //User user = new User();
+                // User user = new User();
                 user.setUsername(txtUsername.getText().trim());
                 user.setName(txtNama.getText().trim());
                 user.setEmail(txtEmail.getText().trim());
                 user.setNoTelp(txtNoTelp.getText().trim());
                 user.setAlamat(txtAlamat.getText().trim());
                 user.setJenisKelamin(rbPria.isSelected() ? "Pria" : "Wanita");
-                
+
                 userDao.update(user);
+                FrameAccount.this.data = userDao.find(FrameAccount.super.user.getId());
+                table.setModel(new UserTableModel(data));
+                FrameAccount.this.revalidate();
+                FrameAccount.this.repaint();
+                /*
+                 * JOptionPane.showMessageDialog(this,
+                 * "Perbarui profil berhasil!\nSilakan login dengan akun Anda.",
+                 * "Sukses",
+                 * JOptionPane.INFORMATION_MESSAGE);
+                 */
+                dispose();
             }
         });
-        
+
         frameProfil.setVisible(true);
     }
 
     public void addPhoto() {
-        User user = data.get(data.size() - 1);
+        // User user = data.get(data.size() - 1);
         JFrame framePhoto = new JFrame("Foto KTP & KK");
         framePhoto.setLayout(new GridLayout(1, 2));
         framePhoto.setSize(600, 600);
@@ -225,26 +240,26 @@ public class FrameAccount extends FramePrimary {
         JLabel lKtp = new JLabel();
         JButton btnAmbilKk = new JButton("Tambahkan File KK");
         JButton btnAmbilKtp = new JButton("Tambahkan File Ktp");
-        
+
         btnAmbilKk.addActionListener(_ -> getPathKk(framePhoto, lKk, btnAmbilKk, user));
         btnAmbilKtp.addActionListener(_ -> getPathKtp(framePhoto, lKtp, btnAmbilKtp, user));
-        
+
         /*
-        if (!user.getKk().isEmpty()) {
-            ImageIcon imgKk = new ImageIcon(user.getKk());
-            btnAmbilKk.setText("Ganti File KK");
-        }
-        */
+         * if (!user.getKk().isEmpty()) {
+         * ImageIcon imgKk = new ImageIcon(user.getKk());
+         * btnAmbilKk.setText("Ganti File KK");
+         * }
+         */
         framePhoto.add(panelKk);
         framePhoto.add(panelKtp);
         panelKk.add(lKk, BorderLayout.CENTER);
         panelKk.add(btnAmbilKk, BorderLayout.SOUTH);
         panelKtp.add(lKtp, BorderLayout.CENTER);
         panelKtp.add(btnAmbilKtp, BorderLayout.SOUTH);
-        
+
         framePhoto.setVisible(true);
     }
-    
+
     private void getPathKk(JFrame framePhoto, JLabel imgPhoto, JButton btn, User user) {
         JFileChooser fcKk = new JFileChooser();
         int result = fcKk.showOpenDialog(framePhoto);
@@ -252,17 +267,20 @@ public class FrameAccount extends FramePrimary {
         // Check if the user selected a file
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fcKk.getSelectedFile();
-            String filePath = selectedFile.getAbsolutePath();  // Get the absolute path of the selected file
+            String filePath = selectedFile.getAbsolutePath(); // Get the absolute path of the selected file
             user.updateFoto(user.getId(), "kk", filePath);
+            // super.user.updateFoto(user.getId(), "kk", filePath);
+            // super.user = userDao.find(super.user.getId()).getFirst();
             ImageIcon imgKk = new ImageIcon(filePath);
             Image image = imgKk.getImage(); // Get the image from ImageIcon
-            Image scaledImage = image.getScaledInstance(400, 400, Image.SCALE_SMOOTH); // Scale the image to fit the JFrame
+            Image scaledImage = image.getScaledInstance(400, 400, Image.SCALE_SMOOTH); // Scale the image to fit the
+                                                                                       // JFrame
             imgKk = new ImageIcon(scaledImage); // Update ImageIcon with the scaled image
             imgPhoto.setIcon(imgKk);
             btn.setText("Ganti File KK");
         }
     }
-    
+
     private void getPathKtp(JFrame framePhoto, JLabel imgPhoto, JButton btn, User user) {
         JFileChooser fcKtp = new JFileChooser();
         int result = fcKtp.showOpenDialog(framePhoto);
@@ -270,11 +288,12 @@ public class FrameAccount extends FramePrimary {
         // Check if the user selected a file
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fcKtp.getSelectedFile();
-            String filePath = selectedFile.getAbsolutePath();  // Get the absolute path of the selected file
+            String filePath = selectedFile.getAbsolutePath(); // Get the absolute path of the selected file
             user.updateFoto(user.getId(), "ktp", filePath);
             ImageIcon imgKtp = new ImageIcon(filePath);
             Image image = imgKtp.getImage(); // Get the image from ImageIcon
-            Image scaledImage = image.getScaledInstance(400, 400, Image.SCALE_SMOOTH); // Scale the image to fit the JFrame
+            Image scaledImage = image.getScaledInstance(400, 400, Image.SCALE_SMOOTH); // Scale the image to fit the
+                                                                                       // JFrame
             imgKtp = new ImageIcon(scaledImage); // Update ImageIcon with the scaled image
             imgPhoto.setIcon(imgKtp);
             btn.setText("Ganti File Ktp");
