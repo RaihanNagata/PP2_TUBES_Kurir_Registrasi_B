@@ -4,14 +4,12 @@ import model.User;
 import dao.UserDao;
 import java.awt.*;
 import view.auth.Login;
-import view.auth.ChangePassword; // Impor halaman ubah password
 import view.auth.ForgotPassword;
 
 import java.awt.event.*;
 import java.io.File;
 import java.util.List;
 import javax.swing.*;
-import javax.swing.table.*;
 
 /**
  *
