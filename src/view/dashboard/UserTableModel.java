@@ -13,8 +13,8 @@ import model.User;
  * @author Haida
  */
 class UserTableModel extends AbstractTableModel {
-    private String[] columnNames = {"Id", "Username", "Name", "Email", "No Telp", "Jenis Kelamin", "Alamat"};
-    private List<User> data;
+    private final String[] columnNames = {"Id", "Username", "Name", "Email", "No Telp", "Jenis Kelamin", "Alamat"};
+    private final List<User> data;
     
     public UserTableModel(List<User> data) {
         this.data = data;

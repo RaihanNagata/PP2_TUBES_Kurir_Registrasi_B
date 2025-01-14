@@ -1,17 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- *
- * @author Haida
- */
+
 public class MySqlConnection {
 
     // Tambahkan nama database pada url
@@ -19,7 +13,7 @@ public class MySqlConnection {
     // Isi dengan nama user yang memiliki access ke database
     private final static String DB_USER = "root";
     // Isi dengan password milik user tersebut
-    private final static String DB_PASS = "";
+    private final static String DB_PASS = "root";
     private static Connection connection;
     
     private static MySqlConnection instance;
